@@ -1,0 +1,71 @@
+@startuml sequence
+== build ==
+Maintainer -> gradlew : invoke publish
+gradlew -> gradlew ++: compile ao_ssl4j
+group #51CBBF plugin
+    gradlew -> gradlew : shadowJar install-time dependencies
+    gradlew -> gradlew : shadowJar pack up4jw package
+    gradlew -> gradlew : generate & pack bootstrap.bat
+    gradlew -> gradlew : generate & pack up4jw.bat
+    gradlew -> gradlew : pack up4jw.remote.uri (optional)
+    gradlew -> gradlew : generate & pack update4j.xml
+    gradlew -> gradlew : jar ao_ssl4j-up4jw
+end
+
+== publish ==
+gradlew -> "ao_ssl4j-up4jw.jar"  : publish
+gradlew -> "update4j.xml (remote)" as remote_xml  : publish
+destroy gradlew
+
+== install ==
+User -> "ao_ssl4j-up4jw.jar" ++ : java -jar "ao_ssl4j-up4jw.jar" --install
+activate User
+"ao_ssl4j-up4jw.jar" -> "update4j.xml (local)" as local_xml  :unpack
+"ao_ssl4j-up4jw.jar" -> Up4jwInstall  : com.gottfriedstudios.Up4jw.up4jwInstall()
+group #51CBBF plugin
+    activate Up4jwInstall
+    Up4jwInstall -> bootstrap.bat  : unpack to System.properties.'user.dir'
+    Up4jwInstall -> up4jw.remote.uri  : unpack to System.properties.'user.dir' (if exists)
+    Up4jwInstall -> up4jw.bat  : unpack to System.properties.'user.dir'
+    Up4jwInstall -> update4j.jar  : unpack to System.properties.'user.dir'
+    destroy Up4jwInstall
+end
+"ao_ssl4j-up4jw.jar" -> "%APPDATA%/Microsoft/Windows\n/Start Menu/Programs/\nStartup/ao_ssl4j.bat" as ao_ssl4j.bat  : unpack
+"ao_ssl4j-up4jw.jar" ->  ao_ssl4j.bat ++ : exec
+destroy User
+destroy "ao_ssl4j-up4jw.jar"
+== User log on==
+User -> ao_ssl4j.bat ++ : logon
+activate User
+ao_ssl4j.bat -> up4jw.bat  : exec
+activate up4jw.bat
+destroy ao_ssl4j.bat
+destroy ao_ssl4j.bat
+group #51CBBF plugin
+    up4jw.bat -> up4jw.bat : set default args
+    up4jw.bat -> bootstrap.bat ++ : call for args
+    bootstrap.bat -> bootstrap.bat : set update4j_jar path to expected\n%PROFILEHOME%/.up4jw\nmvn repo location
+    bootstrap.bat -> up4jw.bat : return args
+    destroy bootstrap.bat
+    up4jw.bat -> override.bat ++ : call for args
+    override.bat -> up4jw.bat : return args
+    destroy override.bat
+    up4jw.bat -> "override-local.bat" ++ : call for args
+    "override-local.bat" -> up4jw.bat : return args
+    destroy "override-local.bat"
+    up4jw.bat -> update4j.jar ++ : \norg.update4j.Bootstrap
+    alt update4j.xml (remote) reachable
+        update4j.jar <-> remote_xml: read update4j config
+    else update4j.xml (remote) unreachable
+        update4j.jar <-> local_xml : read update4j config
+    end
+    update4j.jar -> bootstrap.bat : overwrite bootstrap.bat\nfor next launch
+    update4j.jar -> update4j.jar : download latest update4j.jar for next launch
+    update4j.jar -> "ao_ssl4j-slim.jar" : install "ao_ssl4j-slim.jar" & dependencies
+    update4j.jar -> local_xml: overlay update4j.xml (remote)\nwith update4j.xml (local)
+    update4j.jar -> "ao_ssl4j-slim.jar" ++ : Main()
+end
+"ao_ssl4j-slim.jar" -> "ao_ssl4j-slim.jar" !! : install ssl certs
+destroy update4j.jar
+destroy up4jw.bat
+@enduml

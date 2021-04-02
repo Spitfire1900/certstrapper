@@ -1,0 +1,19 @@
+%APPDATA%/.../Startup
+|-ao_ssl4j.bat
+
+%USER_HOME%
+|-ao_ssl4j
+  |-.up4jw
+    |-bootstrap.bat
+    |-override.bat
+    |-override-local.bat
+  |-up4jw.bat
+  |-up4jw.remote.uri
+  |-update4j.xml
+|-.up4jw
+  |-.m2/repository (mvn repository)
+   |-org
+     |-update4j
+       |-update4j
+         |-1.4.4-1-jdk8+liviocavallo+spitfire1900
+           |-update4j-1.4.4-1-jdk8+liviocavallo+spitfire1900.jar
