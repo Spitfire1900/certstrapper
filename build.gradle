@@ -29,7 +29,7 @@ dependencies {
     implementation "org.codehaus.groovy:groovy:${groovyVers}"
     
     // This dependency is used by the application - added by gradle init
-    implementation 'com.google.guava:guava:31.0.1-jre'
+    implementation 'com.google.guava:guava:31.1-jre'
 	
 	// Required to get cert provided by untrusted certstore
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
@@ -43,8 +43,8 @@ dependencies {
     testImplementation( 'com.athaydes:spock-reports:2.3.0-groovy-3.0' ) {
         transitive = false // this avoids affecting your version of Groovy/Spock
     }
-    testImplementation 'org.slf4j:slf4j-api:1.7.35'
-    testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.35'
+    testImplementation 'org.slf4j:slf4j-api:1.7.36'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.36'
     testRuntimeOnly "org.codehaus.groovy:groovy-json:${groovyVers}"
     testRuntimeOnly "org.codehaus.groovy:groovy-xml:${groovyVers}"
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-api:5.8.2' // Required by Eclipse to run tests
