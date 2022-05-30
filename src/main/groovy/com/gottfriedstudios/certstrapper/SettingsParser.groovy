@@ -12,12 +12,14 @@ public class SettingsParser {
 	brand = "ford"
 	doors = 5
 	'''
-
+		// File toml = new File(settingsInput)
+		// yaml.withReader() { reader ->
 		ObjectMapper tomlReader = new TomlMapper(new TomlFactory())
 		LinkedHashMap  tomlObj = tomlReader.readValue(toml, LinkedHashMap)
 		ObjectWriter tomlWriter = new ObjectMapper().writerWithDefaultPrettyPrinter()
 		String toml2json = tomlWriter.writeValueAsString(tomlObj)
 		String inputJson = toml2json
 		println inputJson
+		// }
 	}
 }
