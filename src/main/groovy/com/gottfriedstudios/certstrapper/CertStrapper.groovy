@@ -70,5 +70,6 @@ dAEWyN2WXaBFPx5c8KIW95Eu8ShWE00VVC3oA4emoZ2nrzBXLrUScifY6VaYYkkR
 		new File("${System.properties.'user.dir'}/.testworkspace").mkdirs()
 		new File("${System.properties.'user.dir'}/.testworkspace/cacerts").withOutputStream { ks.store(it, "changeit".toCharArray()) }
 		Files.copy(certBundle.toPath(), new File("${System.properties.'user.dir'}/.testworkspace/certbundle.crt").toPath(), StandardCopyOption.REPLACE_EXISTING)
+		new SettingsParser().parseSettings()
 	}
 }

@@ -27,6 +27,9 @@ dependencies {
     // Groovy project
     def groovyVers = '3.0.10'
     implementation "org.codehaus.groovy:groovy:${groovyVers}"
+	
+	// Required by SettingsParser
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.13.3'
     
     // This dependency is used by the application - added by gradle init
     implementation 'com.google.guava:guava:31.1-jre'
